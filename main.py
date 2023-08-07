@@ -49,6 +49,7 @@ for row in auction_rows:
     data.append(data_dict)
 
 
+
 # Подключение к базе данных
 conn = psycopg2.connect(
     host="ваш_хост",
