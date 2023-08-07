@@ -51,10 +51,10 @@ for row in auction_rows:
 
 # Подключение к базе данных
 conn = psycopg2.connect(
-    host="ваш_хост",
-    database="ваша_база_данных",
-    user="ваш_пользователь",
-    password="ваш_пароль"
+    host="localhost",
+    database="kpgold",
+    user="postgres",
+    password= "shtopor626"
 )
 
 # Создание курсора для выполнения SQL-запросов
