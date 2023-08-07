@@ -2,17 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 import psycopg2
 
+# url из задачи
 url = 'https://nedradv.ru/nedradv/ru/auction'
 
-html_code = requests.get(url).text
+html_code = requests.get(url).text  # запрос html страницы
 
 soup = BeautifulSoup(html_code, 'html.parser')
-auction_rows = soup.find_all('tr')[1:]
+auction_rows = soup.find_all('tr')[1:] # ищем тег <tr>
 
 data = []
 
 for row in auction_rows:
-
+    # проходим циклом и ищем нужные данные
     cells = row.find_all('td', style='text-align:left;')
     hyper_link = 'https://nedradv.ru/' + row.find('a',  attrs={"class": 'g-color-gray-dark-v1'}).get('href')
     date = cells[0].a.text.strip() if cells and cells[0].a else "N/A"
@@ -20,23 +21,19 @@ for row in auction_rows:
     region = cells[2].a.text.strip() if cells and cells[2].a else "N/A"
     status = cells[3].a.text.strip() if cells and cells[3].a else "N/A"
 
-
+    # здесь мы открываем детальную ссылку и берем оттуда данные.
     hyper_info = requests.get(hyper_link).text
     detail = BeautifulSoup(hyper_info, 'html.parser')
-
-    # Extracting the deadline for submitting applications
+    
     deadline_element = detail.find('dt', string='Срок подачи заявок')
     deadline = deadline_element.find_next('dd', class_='col-sm-9').get_text() if deadline_element else "N/A"
-
-    # Extracting the participation fee for the auction
+   
     participation_fee_element = detail.find('dt', string='Взнос за участие в аукционе (руб)')
     participation_fee = participation_fee_element.find_next('dd', class_='col-sm-9').get_text() if participation_fee_element else "N/A"
-
-    # Extracting the organizer
+    
     organizator_element = detail.find('dt', string='Организатор')
     organizator = organizator_element.find_next('dd', class_='col-sm-9').get_text() if organizator_element else "N/A"
  
-
     data_dict = {
         "date": date,
         'lot': lot,
