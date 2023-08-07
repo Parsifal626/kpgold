@@ -55,7 +55,7 @@ conn = psycopg2.connect(
     host="localhost",
     database="kpgold",
     user="postgres",
-    password= "shtopor626"
+    password= "user"
 )
 
 # Создание курсора для выполнения SQL-запросов
